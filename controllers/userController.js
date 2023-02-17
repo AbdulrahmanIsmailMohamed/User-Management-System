@@ -20,7 +20,25 @@ const search = (req, res) => {
     );
 }
 
+const form = (req, res) => {
+    res.render("addUser");
+}
+
+const adduser = (req, res) => {
+    const { first_name, last_name, email, phone, comment } = req.body;
+    co.query(
+        "INSERT INTO user SET first_name = ?, last_name = ?, email = ?, phone = ?, comment = ?;",
+        [first_name, last_name, email, phone, comment],
+        (err) => {
+            if (err) throw err;
+            res.render("addUser", { alert: "User added successfully :)" });
+        }
+    )
+}
+
 module.exports = {
     view,
-    search
+    search,
+    form,
+    adduser
 }
