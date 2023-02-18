@@ -1,7 +1,7 @@
 const co = require("../db/connect");
 
 const view = (req, res) => {
-    const query = "SELECT * FROM user;";
+    const query = "SELECT * FROM user WHERE status = 'active';";
     co.query(query, (err, row) => {
         if (err) throw err;
         res.render("home", { row });
@@ -56,11 +56,21 @@ const update = (req, res) => {
     });
 }
 
+const hideUser = (req, res) => {
+    const id = req.params.id
+    const query = "UPDATE user SET status = 'removed' WHERE id = ?;"
+    co.query(query, id, (err) => {
+        if (err) throw err;
+        res.redirect('/');
+    });
+}
+
 module.exports = {
     view,
     search,
     form,
     adduser,
     edit,
-    update
+    update,
+    hideUser
 }
