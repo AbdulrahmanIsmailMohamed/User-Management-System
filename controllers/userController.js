@@ -1,9 +1,8 @@
 const co = require("../db/connect");
 
-
-
 const view = (req, res) => {
-    co.query("SELECT * FROM user;", (err, row) => {
+    const query = "SELECT * FROM user;";
+    co.query(query, (err, row) => {
         if (err) throw err;
         res.render("home", { row });
     })
@@ -11,14 +10,12 @@ const view = (req, res) => {
 
 const search = (req, res) => {
     const search = req.body.search;
-    co.query(
-        `SELECT * FROM user WHERE first_name LIKE ? OR last_name LIKE ? OR email LIKE ? OR phone LIKE ?;`,
-        [`%${search}%`, `%${search}%`, `%${search}%`, `%${search}%`],
-        (err, row) => {
-            if (err) throw err;
-            res.render("home", { row });
-        }
-    );
+    const query = `SELECT * FROM user WHERE first_name LIKE ? OR last_name LIKE ? OR email LIKE ? OR phone LIKE ?;`;
+    const value = [`%${search}%`, `%${search}%`, `%${search}%`, `%${search}%`];
+    co.query(query, value, (err, row) => {
+        if (err) throw err;
+        res.render("home", { row });
+    });
 }
 
 const form = (req, res) => {
@@ -27,19 +24,19 @@ const form = (req, res) => {
 
 const adduser = (req, res) => {
     const { first_name, last_name, email, phone, comment } = req.body;
-    co.query(
-        "INSERT INTO user SET first_name = ?, last_name = ?, email = ?, phone = ?, comment = ?;",
-        [first_name, last_name, email, phone, comment],
-        (err) => {
-            if (err) throw err;
-            res.render("addUser", { alert: "User added successfully :)" });
-        }
-    )
+    const query = "INSERT INTO user SET first_name = ?, last_name = ?, email = ?, phone = ?, comment = ?;";
+    const value = [first_name, last_name, email, phone, comment];
+    co.query(query, value, (err) => {
+        if (err) throw err;
+        res.render("addUser", { alert: "User added successfully :)" });
+    });
 }
 
 const edit = (req, res) => {
     const id = req.params.id
-    co.query(`SELECT * FROM user WHERE id = ?;`, [id], (err, row) => {
+    const query = `SELECT * FROM user WHERE id = ?;`;
+    const value = [id]
+    co.query(query, value, (err, row) => {
         if (err) throw err;
         res.render("editUser", { row });
     });
