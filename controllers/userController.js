@@ -65,6 +65,15 @@ const hideUser = (req, res) => {
     });
 }
 
+const viewUser = (req, res) => {
+    const id = req.params.id
+    const query = "SELECT * FROM user WHERE id = ?"
+    co.query(query, id, (err, row) => {
+        if (err) throw err;
+        res.render("viewUser", { row })
+    })
+}
+
 module.exports = {
     view,
     search,
@@ -72,5 +81,6 @@ module.exports = {
     adduser,
     edit,
     update,
-    hideUser
+    hideUser,
+    viewUser
 }
