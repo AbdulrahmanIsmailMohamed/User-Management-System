@@ -1,10 +1,11 @@
 const co = require("../db/connect");
 
+
+
 const view = (req, res) => {
     co.query("SELECT * FROM user;", (err, row) => {
         if (err) throw err;
         res.render("home", { row });
-        console.log(row);
     })
 }
 
@@ -36,9 +37,33 @@ const adduser = (req, res) => {
     )
 }
 
+const edit = (req, res) => {
+    const id = req.params.id
+    co.query(`SELECT * FROM user WHERE id = ?;`, [id], (err, row) => {
+        if (err) throw err;
+        res.render("editUser", { row });
+    });
+}
+
+const update = (req, res) => {
+    const id = req.params.id
+    const { first_name, last_name, email, phone, comment } = req.body;
+    const query = `UPDATE user SET first_name = ?, last_name = ?, email = ?, phone = ?, comment = ? WHERE id = ?;`;
+    const value = [first_name, last_name, email, phone, comment, id];
+    co.query(query, value, (err, row) => {
+        if (err) throw err;
+        co.query(`SELECT * FROM user WHERE id = ${id};`, (err, row) => {
+            if (err) throw err;
+            res.render("editUser", { row, alert: `${first_name} has been updated` });
+        });
+    });
+}
+
 module.exports = {
     view,
     search,
     form,
-    adduser
+    adduser,
+    edit,
+    update
 }
