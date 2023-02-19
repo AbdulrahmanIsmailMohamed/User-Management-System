@@ -9,15 +9,17 @@ const {
     hideUser,
     viewUser
 } = require("../controllers/userController");
+const { ensureAuthenticated } = require("../config/auth");
 
-router.route("/").get(view).post(search);
 
-router.route("/adduser").get(form).post(adduser);
+router.route("/").get(ensureAuthenticated, view).post(ensureAuthenticated, search);
 
-router.route("/updateuser/:id").get(edit).post(update);
+router.route("/adduser").get(ensureAuthenticated, form).post(ensureAuthenticated, adduser);
 
-router.get("/:id", hideUser);
+router.route("/updateuser/:id").get(ensureAuthenticated, edit).post(ensureAuthenticated, update);
 
-router.get("/viewuser/:id", viewUser)
+router.get("/viewuser/:id", ensureAuthenticated, viewUser)
+
+router.get("/:id", ensureAuthenticated, hideUser);
 
 module.exports = router;

@@ -1,5 +1,5 @@
 CREATE TABLE user (
-    `id` AUTO_INCREMENT INT NOT NULL,
+    `id` AUTO_INCREMENT INT,
     `first_name` VARCHAR(45) NOT NULL,
     `last_name` VARCHAR(45),
     `email` VARCHAR(45) NOT NULL,

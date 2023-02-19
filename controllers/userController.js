@@ -57,6 +57,9 @@ const update = (req, res) => {
 }
 
 const hideUser = (req, res) => {
+    if (req.url === '/favicon.ico') {
+        return;
+    }
     const id = req.params.id
     const query = "UPDATE user SET status = 'removed' WHERE id = ?;"
     co.query(query, id, (err) => {
